@@ -354,6 +354,32 @@ def players_bet(g: Game) -> Game:
     )
 
 
+def my_bet(
+    my_chips: int,
+    my_cards: List[Card],
+    bet_players: List[Other],
+    betting_players: List[Other],
+    community_cards: List[Card],
+    min_bet_amt: int,
+    max_bet_amt: int,
+    total_bet_amt: int
+) -> int:
+    if my_chips >= min_bet_amt:
+        betM = min_bet_amt
+        raiseM = 1
+        if my_cards[0].rank == my_cards[1].rank:
+            raiseM = raiseM + min_bet_amt
+        elif my_cards[0].suit == my_cards[1].suit:
+            raiseM = raiseM + min_bet_amt - 1
+        elif abs(my_cards[0].rank - my_cards[1].rank) < 2:
+            raiseM = raiseM + 1
+
+        return betM + raiseM
+    else:
+        return 0
+
+
+
 if __name__ == '__main__':
     from . import example, turn
 
@@ -361,7 +387,7 @@ if __name__ == '__main__':
         [
             MetaPlayer(
                 'Me',
-                turn.bet
+                turn.my_bet
             ),
             MetaPlayer(
                 'A',
